@@ -186,7 +186,8 @@ nav .nav-links{display:none}
       <a href="#evidence">Evidence</a>
       <a href="#research">Research</a>
       <a href="#install">Install</a>
-      <a href="https://github.com/AnouarTrust/Trustlog-dynamics" target="_blank" class="gh">GitHub ↗</a>
+      <a href="https://arena.trustlogdynamics.com" target="_blank" class="gh">Live Demo ↗</a>
+      <a href="https://comptexlabs.com" target="_blank" class="gh">Comptex Labs ↗</a>
     </div>
   </div>
 </nav>
@@ -195,13 +196,13 @@ nav .nav-links{display:none}
   <div class="hero">
     <div class="announce">
       <div class="dot"></div>
-      <span>OPEN SOURCE · COMPTEX LABS</span>
+      <span>LIVE NOW · OPEN SOURCE · COMPTEX LABS</span>
     </div>
     <h1>Autonomous AI has<br>no kill switch.<br><em>We built one.</em></h1>
     <p class="intro">Your AI agents spend money 24/7 with nobody watching. TrustLog Dynamics applies quantitative finance risk frameworks — convexity detection, variance analysis — to terminate rogue processes before they drain your budget.</p>
     <div class="hero-actions">
-      <a href="https://github.com/AnouarTrust/Trustlog-dynamics" class="btn-gold" target="_blank">View on GitHub</a>
-      <a href="#evidence" class="btn-line">Watch live intercepts ↓</a>
+      <a href="https://arena.trustlogdynamics.com" class="btn-gold" target="_blank">Watch it live →</a>
+      <a href="https://github.com/AnouarTrust/Trustlog-dynamics" class="btn-line" target="_blank">View on GitHub →</a>
     </div>
     <div class="chart-label-row">LIVE SIMULATION — CONVEXITY BREACH DETECTION</div>
     <div class="chart-area">
@@ -269,6 +270,21 @@ nav .nav-links{display:none}
         <div class="eq-explain">Zero-variance detection. When <em>σ²</em> (rolling cost variance) drops below <em>ε</em> (threshold), the agent is stuck in a loop. Sever the connection.</div>
       </div>
     </div>
+    <div style="display:grid;grid-template-columns:1fr 1px 1fr;gap:0;align-items:start;margin-top:48px;padding-top:48px;border-top:1px solid rgba(184,146,46,0.1)">
+      <div class="eq-item">
+        <div class="eq-origin">Lo-MacKinlay (1988) — Quantitative finance</div>
+        <div class="eq-formula">VR <span class="gold">=</span> σ²(q)<span class="gold">/</span>qσ²(1)</div>
+        <div class="eq-result">VR &lt; 0.3 → LOOP</div>
+        <div class="eq-explain">Variance Ratio Test. When <em>VR</em> collapses below 0.3, token behaviour is no longer random — the agent is repeating a predictable pattern. Live in the arena.</div>
+      </div>
+      <div class="eq-divider"></div>
+      <div class="eq-item">
+        <div class="eq-origin">Time series analysis</div>
+        <div class="eq-formula">AC <span class="gold">=</span> ρ(t,t-1)</div>
+        <div class="eq-result">AC &gt; 0.8 → KILL</div>
+        <div class="eq-explain">Autocorrelation. When <em>AC</em> approaches 1.0, each agent action is a copy of the last. Independent decisions have AC near zero. Repeating patterns approach 1.</div>
+      </div>
+    </div>
     <div class="math-footer">
       <p>The same mathematics that governs <strong>bond portfolios</strong> and triggers <strong>circuit breakers</strong> on trading floors — applied to autonomous AI spend.</p>
     </div>
@@ -280,6 +296,15 @@ nav .nav-links{display:none}
     <div class="sec-label">02 — Empirical Evidence</div>
     <div class="sec-h">Two providers. Two failures.<br><em>Both caught on camera.</em></div>
     <div class="sec-intro" style="margin-bottom:56px">We tested TrustLog Dynamics against real LLM agents in live-fire conditions. No simulations. No mock data. Real agents, real costs, real intercepts.</div>
+
+    <div style="background:#0a0a0a;border-radius:8px;padding:28px 32px;margin-bottom:48px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:10px;letter-spacing:3px;color:#d4a84b;font-weight:600;margin-bottom:8px">● LIVE RIGHT NOW</div>
+        <div style="font-family:var(--serif);font-size:20px;color:#e5e5e5;margin-bottom:6px">Watch an AI agent go rogue. Watch TrustLog stop it.</div>
+        <div style="font-size:13px;color:#555">Real agent. Real math. Real intercept. Running 24/7 on AWS.</div>
+      </div>
+      <a href="https://arena.trustlogdynamics.com" target="_blank" style="white-space:nowrap;background:#d4a84b;color:#0a0a0a;text-decoration:none;font-size:13px;font-weight:600;padding:12px 24px;border-radius:4px;letter-spacing:0.5px">Watch it live →</a>
+    </div>
 
     <div class="intercept-block">
       <div class="intercept-header">
@@ -394,7 +419,12 @@ nav .nav-links{display:none}
   <div class="section" id="install">
     <div class="sec-label">05 — Install</div>
     <div class="sec-h">Three commands. <em>Nothing else.</em></div>
-    <div class="sec-intro" style="margin-bottom:36px">Clone, install, run. TrustLog Dynamics runs as a systemd daemon in the background. Once it's up, it's watching.</div>
+    <div class="sec-intro" style="margin-bottom:24px">Clone, install, run. TrustLog Dynamics runs as a systemd daemon in the background. Once it's up, it's watching.</div>
+
+    <div style="margin-bottom:32px;padding:20px 24px;border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div style="font-size:14px;color:var(--text-body)">Want to see it working before you install? The live demo runs a real agent 24/7.</div>
+      <a href="https://arena.trustlogdynamics.com" target="_blank" style="color:var(--gold);text-decoration:none;font-size:13px;font-weight:500;white-space:nowrap">See it live →</a>
+    </div>
 
     <div class="code-box"><span class="c"># Clone</span>
 <span class="g">git clone https://github.com/AnouarTrust/Trustlog-dynamics.git</span>
@@ -445,12 +475,17 @@ nav .nav-links{display:none}
 
     <div class="dir-body" style="margin-bottom:20px">If you're a researcher working on AI safety, operational risk or financial governance, we'd welcome a conversation about where this framework could go next. If you're an engineer running autonomous agents and want to help stress-test the detection engine, the repo is open and waiting. If you're a professor or institution interested in the intersection of quantitative finance and AI governance, we are actively looking for academic collaborators to formalise and extend this work.</div>
 
-    <div class="dir-body" style="margin-bottom:32px">This isn't a finished product asking for applause. It's an open framework looking for the right minds to make it better.</div>
+    <div class="dir-body" style="margin-bottom:40px">This isn't a finished product asking for applause. It's an open framework looking for the right minds to make it better.</div>
 
-    <div style="font-size:14px;color:#333;line-height:2">
-      <a href="https://x.com/Anouarbf2" target="_blank" style="color:#b8922e;text-decoration:none">Follow @Anouarbf2 on X</a><br>
-      <a href="https://github.com/AnouarTrust/Trustlog-dynamics" target="_blank" style="color:#b8922e;text-decoration:none">Contribute on GitHub</a><br>
-      <a href="mailto:anouarvis1@gmail.com" style="color:#b8922e;text-decoration:none">anouarvis1@gmail.com</a>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:32px">
+      <a href="mailto:anouarvis1@gmail.com?subject=TrustLog%20Dynamics%20—%20Early%20Access" style="background:#1a1a18;color:#fff;text-decoration:none;font-size:13px;font-weight:500;padding:12px 24px;border-radius:3px;letter-spacing:0.3px;transition:opacity 0.2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Request early access →</a>
+      <a href="mailto:anouarvis1@gmail.com?subject=TrustLog%20Dynamics%20—%20Let's%20talk" style="color:#b8922e;text-decoration:none;font-size:13px;font-weight:500;padding:12px 0;letter-spacing:0.3px;border-bottom:1px solid rgba(184,146,46,0.3)">Get in touch →</a>
+    </div>
+
+    <div style="font-size:13px;color:#999;line-height:2">
+      <a href="https://x.com/Anouarbf2" target="_blank" style="color:#b8922e;text-decoration:none">@Anouarbf2 on X</a> &nbsp;·&nbsp;
+      <a href="https://github.com/AnouarTrust/Trustlog-dynamics" target="_blank" style="color:#b8922e;text-decoration:none">GitHub</a> &nbsp;·&nbsp;
+      <a href="https://comptexlabs.com" target="_blank" style="color:#b8922e;text-decoration:none">Comptex Labs</a>
     </div>
   </div>
 </div>
@@ -461,8 +496,9 @@ nav .nav-links{display:none}
   <div class="closing">
     <div class="closing-statement">Your AI agents work while you sleep.<br><em>TrustLog Dynamics makes sure they don't rob you while you dream.</em></div>
     <div class="closing-actions">
-      <a href="https://github.com/AnouarTrust/Trustlog-dynamics" class="btn-gold" target="_blank">View on GitHub</a>
-      <a href="https://youtu.be/vIoWBR8MJh4" class="btn-line" target="_blank">Watch demo →</a>
+      <a href="https://arena.trustlogdynamics.com" class="btn-gold" target="_blank">Watch it live →</a>
+      <a href="https://github.com/AnouarTrust/Trustlog-dynamics" class="btn-line" target="_blank">View on GitHub →</a>
+      <a href="mailto:anouarvis1@gmail.com?subject=TrustLog%20Dynamics%20—%20Early%20Access" class="btn-line" target="_blank">Get in touch →</a>
     </div>
   </div>
 </div>
