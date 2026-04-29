@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentsitter — The babysitter for your AI agents</title>
+<meta name="description" content="Your AI agents are out there right now, spending your money. Agentsitter watches them 24/7 and texts you the moment something looks wrong.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --cream: #faf9f6;
+  --white: #ffffff;
+  --ink: #1a1814;
+  --ink2: #2e2b26;
+  --muted: #7a7570;
+  --border: #e8e4dc;
+  --border2: #d4cfc6;
+  --green: #16a34a;
+  --green-bg: #f0fdf4;
+  --green-border: #bbf7d0;
+  --green-text: #15803d;
+  --red: #dc2626;
+  --red-bg: #fef2f2;
+  --red-border: #fecaca;
+  --amber: #d97706;
+  --amber-bg: #fffbeb;
+  --amber-border: #fde68a;
+  --accent: #f97316;
+  --accent-bg: #fff7ed;
+  --serif: 'Lora', Georgia, serif;
+  --sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html { scroll-behavior: smooth; color-scheme: light only; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 60px;
+  background: rgba(250,249,246,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  width: 28px;
+  height: 28px;
+  background: var(--ink);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.logo-mark::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #4ade80;
+  border-radius: 50%;
+  animation: breathe 2.5s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.5;transform:scale(0.75)}
+}
+
+.logo-name {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links a {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+  font-weight: 500;
+}
+
+.nav-links a:hover { color: var(--ink); }
+
+.nav-btn {
+  background: var(--ink) !important;
+  color: var(--white) !important;
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: opacity 0.15s;
+}
+
+.nav-btn:hover { opacity: 0.8 !important; }
+
+/* HERO */
+.hero {
+  padding: 5rem 2rem 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+  min-height: 82vh;
+}
+
+.hero-left { max-width: 520px; }
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  color: var(--green-text);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--mono);
+  padding: 0.35rem 0.85rem;
+  border-radius: 100px;
+  margin-bottom: 2rem;
+  letter-spacing: -0.01em;
+}
+
+.tag-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: breathe 2s infinite;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-weight: 400;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  color: var(--ink);
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--muted);
+}
+
+.hero-body {
+  font-size: 1.05rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 2.25rem;
+  max-width: 420px;
+}
+
+.hero-body strong { color: var(--ink); font-weight: 600; }
+
+.signup-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.signup-group input {
+  flex: 1;
+  height: 46px;
+  padding: 0 1.1rem;
+  border: 1.5px solid var(--border2);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: var(--sans);
+  background: var(--white);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  min-width: 0;
+}
+
+.signup-group input::placeholder { color: #bbb; }
+
+.signup-group input:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px rgba(26,24,20,0.06);
+}
+
+.signup-group button {
+  height: 46px;
+  padding: 0 1.4rem;
+  background: var(--ink);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--sans);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.signup-group button:hover { opacity: 0.85; transform: translateY(-1px); }
+.signup-group button:active { transform: translateY(0); }
+
+.hero-footnote {
+  font-size: 12.5px;
+  color: #b0ab9f;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.hero-footnote span { display: flex; align-items: center; gap: 5px; }
+.hero-footnote a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+
+/* HERO RIGHT — CARD STACK */
+.hero-right { position: relative; }
+
+.card-stack {
+  position: relative;
+  height: 380px;
+}
+
+.monitor-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  position: absolute;
+}
+
+.card-main {
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.card-behind-1 {
+  width: 94%;
+  left: 3%;
+  top: 14px;
+  z-index: 2;
+  opacity: 0.6;
+  transform: scale(0.97);
+}
+
+.card-behind-2 {
+  width: 88%;
+  left: 6%;
+  top: 26px;
+  z-index: 1;
+  opacity: 0.3;
+  transform: scale(0.94);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title-dot {
+  width: 8px;
+  height: 8px;
+  background: #4ade80;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(74,222,128,0.2);
+  animation: breathe 2s infinite;
+}
+
+.card-title span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink2);
+}
+
+.badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.badge-green { background: var(--green-bg); color: var(--green-text); border: 1px solid var(--green-border); }
+.badge-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.badge-amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+
+/* SPARKLINE */
+.sparkline-wrap {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 1rem 1rem 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 52px;
+  margin-bottom: 0.5rem;
+}
+
+.spark {
+  flex: 1;
+  border-radius: 3px 3px 0 0;
+  background: var(--border2);
+  transition: height 0.9s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.spark.ok { background: #86efac; }
+.spark.warn { background: #fde68a; }
+.spark.bad { background: #fca5a5; }
+
+.sparkline-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.card-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.stat-box {
+  background: var(--cream);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+}
+
+.stat-label {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.stat-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.stat-value.green { color: var(--green); }
+
+/* ALERT CARD */
+.alert-card {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 220px;
+  background: var(--white);
+  border: 1.5px solid var(--red-border);
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 8px 32px rgba(220,38,38,0.1), 0 2px 8px rgba(0,0,0,0.06);
+  z-index: 10;
+  animation: slideInAlert 0.5s 1s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes slideInAlert {
+  from { opacity: 0; transform: translateY(16px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.alert-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 0.5rem;
+}
+
+.alert-icon {
+  width: 22px;
+  height: 22px;
+  background: var(--red-bg);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.alert-title { font-size: 12px; font-weight: 700; color: var(--red); }
+.alert-body { font-size: 11.5px; color: var(--muted); line-height: 1.5; }
+.alert-body strong { color: var(--ink); font-weight: 600; }
+
+/* STRIP */
+.strip {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.strip-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.strip-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
+
+/* SECTIONS */
+section { padding: 5rem 2rem; }
+
+.container { max-width: 1000px; margin: 0 auto; }
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.85rem;
+}
+
+.section-h {
+  font-family: var(--serif);
+  font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 3rem;
+  color: var(--ink);
+}
+
+.section-h em { font-style: italic; color: var(--muted); }
+
+/* INCIDENT */
+.incident-wrap {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.incident-top {
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3rem;
+  align-items: start;
+  border-bottom: 1px solid var(--border);
+}
+
+.incident-num {
+  font-family: var(--serif);
+  font-size: clamp(5rem, 10vw, 8rem);
+  font-weight: 400;
+  color: var(--red);
+  line-height: 1;
+  font-style: italic;
+}
+
+.incident-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+  color: var(--red);
+  font-size: 11px;
+  font-family: var(--mono);
+  font-weight: 500;
+  padding: 0.3rem 0.75rem;
+  border-radius: 100px;
+  margin-bottom: 1rem;
+}
+
+.incident-content h3 {
+  font-family: var(--serif);
+  font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+  font-weight: 400;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+  color: var(--ink);
+}
+
+.incident-content h3 em { font-style: italic; color: var(--muted); }
+
+.incident-content p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 480px;
+}
+
+.incident-content p + p { margin-top: 0.75rem; }
+
+.incident-bottom {
+  padding: 1.5rem 3rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: var(--cream);
+  flex-wrap: wrap;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.tl-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tl-dot.red { background: var(--red); }
+.tl-dot.green { background: var(--green); }
+
+.timeline-sep {
+  width: 24px;
+  height: 1px;
+  background: var(--border2);
+}
+
+/* HOW IT WORKS */
+.how-bg { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+}
+
+.step {
+  background: var(--white);
+  padding: 2.25rem 2rem;
+}
+
+.step-n {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-n::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.step h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.step p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+.code-block {
+  background: var(--ink);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: #86efac;
+  line-height: 1.65;
+}
+
+.code-block .comment { color: #4b5563; }
+
+/* SIGNALS */
+.signals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.signal-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 1.75rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.signal-card:hover {
+  border-color: var(--border2);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.signal-emoji {
+  font-size: 28px;
+  margin-bottom: 1.25rem;
+  display: block;
+  line-height: 1;
+}
+
+.signal-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--ink);
+}
+
+.signal-card p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* CTA */
+.cta-wrap {
+  background: var(--ink);
+  border-radius: 24px;
+  padding: 4.5rem 3.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-wrap::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(74,222,128,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-wrap h2 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.cta-wrap h2 em { font-style: italic; color: #4ade80; }
+
+.cta-wrap p {
+  color: rgba(255,255,255,0.5);
+  font-size: 16px;
+  margin-bottom: 2.5rem;
+}
+
+.cta-form {
+  display: flex;
+  gap: 8px;
+  max-width: 420px;
+  margin: 0 auto 1rem;
+}
+
+.cta-form input {
+  flex: 1;
+  height: 48px;
+  padding: 0 1.25rem;
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: var(--sans);
+  color: var(--white);
+  outline: none;
+  transition: border-color 0.15s;
+  min-width: 0;
+}
+
+.cta-form input::placeholder { color: rgba(255,255,255,0.3); }
+.cta-form input:focus { border-color: rgba(255,255,255,0.4); }
+
+.cta-form button {
+  height: 48px;
+  padding: 0 1.5rem;
+  background: #4ade80;
+  color: var(--ink);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--sans);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.cta-form button:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.cta-footnote { color: rgba(255,255,255,0.25); font-size: 12px; }
+
+/* FOOTER */
+footer {
+  padding: 2rem 2.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-brand { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+.footer-brand p { font-size: 13px; color: var(--muted); }
+.footer-brand a { font-size: 13px; color: var(--muted); text-decoration: none; }
+.footer-brand a:hover { color: var(--ink); }
+.footer-links { display: flex; gap: 1.75rem; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+.footer-links a:hover { color: var(--ink); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* MOBILE */
+@media(max-width:768px) {
+  nav { padding: 0 1.25rem; }
+  .nav-links a:not(.nav-btn) { display: none; }
+  .hero { grid-template-columns: 1fr; gap: 3rem; min-height: auto; padding: 3.5rem 1.25rem 2rem; }
+  .hero-right { display: none; }
+  .signup-group { flex-direction: column; }
+  .signup-group button { width: 100%; }
+  .incident-top { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem; }
+  .incident-bottom { padding: 1.25rem 2rem; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .signals-grid { grid-template-columns: 1fr; }
+  .cta-wrap { padding: 3rem 1.5rem; }
+  .cta-form { flex-direction: column; }
+  .cta-form button { width: 100%; }
+  section { padding: 3.5rem 1.25rem; }
+  footer { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">
+    <div class="logo-mark"></div>
+    <span class="logo-name">agentsitter</span>
+  </a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="https://arena.trustlogdynamics.com" target="_blank">Live demo</a>
+    <a href="https://github.com/AnouarTrust/Trustlog-dynamics" target="_blank">GitHub</a>
+    <a href="#signup" class="nav-btn">Get early access</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" style="max-width:1100px;margin:0 auto;padding:5rem 2.5rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;min-height:84vh">
+  <div>
+    <div class="hero-tag">
+      <span class="tag-dot"></span>
+      Live API · Watching 24/7
+    </div>
+
+    <h1>Your AI agent is<br>out there right now.<br><em>Is it behaving?</em></h1>
+
+    <p class="hero-body">
+      Somewhere right now a founder is waking up to an API bill they weren't expecting. <strong>Agentsitter exists so that founder isn't you.</strong>
+    </p>
+
+    <form class="signup-group" id="signup" onsubmit="handleSignup(event)">
+      <input type="email" placeholder="your@email.com" required id="hero-email">
+      <button type="submit">Get early access →</button>
+    </form>
+
+    <div class="hero-footnote">
+      <span>✓ Free during beta</span>
+      <span>✓ No credit card</span>
+      <span>✓ 2 minute setup</span>
+      <a href="https://arena.trustlogdynamics.com" target="_blank">See the live demo →</a>
+    </div>
+  </div>
+
+  <!-- CARD STACK -->
+  <div class="hero-right">
+    <div class="card-stack">
+      <div class="monitor-card card-behind-2"></div>
+      <div class="monitor-card card-behind-1"></div>
+      <div class="monitor-card card-main">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="card-title-dot"></span>
+            <span>my-research-agent</span>
+          </div>
+          <span class="badge badge-green">● HEALTHY</span>
+        </div>
+        <div class="sparkline-wrap">
+          <div class="sparkline" id="sparkline">
+            <div class="spark ok" style="height:35%"></div>
+            <div class="spark ok" style="height:50%"></div>
+            <div class="spark ok" style="height:40%"></div>
+            <div class="spark ok" style="height:65%"></div>
+            <div class="spark ok" style="height:45%"></div>
+            <div class="spark ok" style="height:55%"></div>
+            <div class="spark ok" style="height:70%"></div>
+            <div class="spark ok" style="height:48%"></div>
+            <div class="spark ok" style="height:38%"></div>
+            <div class="spark ok" style="height:60%"></div>
+            <div class="spark ok" style="height:44%"></div>
+            <div class="spark ok" style="height:52%"></div>
+          </div>
+          <div class="sparkline-labels">
+            <span>12 hrs ago</span>
+            <span>6 hrs ago</span>
+            <span>now</span>
+          </div>
+        </div>
+        <div class="card-stats">
+          <div class="stat-box">
+            <div class="stat-label">spent today</div>
+            <div class="stat-value" id="cost">£2.41</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">api calls</div>
+            <div class="stat-value" id="calls">847</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">status</div>
+            <div class="stat-value green">Green</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALERT POPUP -->
+      <div class="alert-card">
+        <div class="alert-header">
+          <div class="alert-icon">🔴</div>
+          <span class="alert-title">Loop detected!</span>
+        </div>
+        <p class="alert-body">
+          <strong>scraper-agent</strong> has made 200 identical calls in the last 3 mins. Cost spiking.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-item"><span class="strip-dot"></span>Open source on GitHub</div>
+  <div class="strip-item"><span class="strip-dot"></span>Works with OpenAI, Anthropic & more</div>
+  <div class="strip-item"><span class="strip-dot"></span>Built in Manchester, UK</div>
+  <div class="strip-item"><span class="strip-dot"></span>By Comptex Labs</div>
+</div>
+
+<!-- INCIDENT -->
+<section>
+  <div class="container">
+    <div class="section-label">Why this exists</div>
+    <h2 class="section-h reveal">The £47,000 wake-up call<br><em>nobody wants.</em></h2>
+    <div class="incident-wrap reveal">
+      <div class="incident-top">
+        <div>
+          <div class="incident-tag-pill">⚠ Real incident · July 2025</div>
+          <div class="incident-num">$47k</div>
+        </div>
+        <div class="incident-content">
+          <h3>Two agents. Talking to each other.<br>Non-stop. <em>For eleven days.</em></h3>
+          <p>
+            A multi-agent research tool slipped into a recursive loop. Nobody noticed.
+            Nobody got an alert. The bill quietly accumulated while the team assumed everything was fine.
+          </p>
+          <p>
+            Agentsitter would have caught it on <strong>day one</strong> — the moment the cost pattern stopped looking normal, the founder would have had a text. Not a $47,000 invoice and a very bad morning.
+          </p>
+        </div>
+      </div>
+      <div class="incident-bottom">
+        <div class="timeline-item">
+          <span class="tl-dot red"></span>
+          Day 1 — Loop starts
+        </div>
+        <div class="timeline-sep"></div>
+        <div class="timeline-item">
+          <span class="tl-dot red"></span>
+          Day 4 — Cost hits $8k
+        </div>
+        <div class="timeline-sep"></div>
+        <div class="timeline-item">
+          <span class="tl-dot red"></span>
+          Day 11 — Someone checks the bill
+        </div>
+        <div class="timeline-sep"></div>
+        <div class="timeline-item">
+          <span class="tl-dot green"></span>
+          With Agentsitter — alerted day 1
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-bg" id="how">
+  <div class="container">
+    <div class="section-label">How it works</div>
+    <h2 class="section-h reveal">Two lines of code.<br><em>Then forget about it.</em></h2>
+    <div class="steps-grid reveal">
+      <div class="step">
+        <div class="step-n">01</div>
+        <h3>Install the package</h3>
+        <p>One command. Works with any AI agent running on OpenAI, Anthropic, or anything else that bills per call.</p>
+        <div class="code-block"><span class="comment"># in your terminal</span><br>pip install agentsitter</div>
+      </div>
+      <div class="step">
+        <div class="step-n">02</div>
+        <h3>Add two lines</h3>
+        <p>Drop this into your existing code. Your agent has no idea it's being watched. Nothing changes for it.</p>
+        <div class="code-block">import agentsitter<br>agentsitter.watch(client,<br>&nbsp;&nbsp;alert="you@email.com")</div>
+      </div>
+      <div class="step">
+        <div class="step-n">03</div>
+        <h3>Get on with your life</h3>
+        <p>We monitor every call. If your agent starts looping, snowballing, or acting odd — you hear about it straight away. No news is good news.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNALS -->
+<section>
+  <div class="container">
+    <div class="section-label">What we watch for</div>
+    <h2 class="section-h reveal">Three things that quietly<br><em>destroy your budget.</em></h2>
+    <div class="signals-grid reveal">
+      <div class="signal-card">
+        <span class="signal-emoji">🔁</span>
+        <h3>Stuck in a loop</h3>
+        <p>Your agent is repeating the same call over and over with no way out. We spot the pattern immediately and alert you before it burns through your budget.</p>
+      </div>
+      <div class="signal-card">
+        <span class="signal-emoji">📈</span>
+        <h3>Costs snowballing</h3>
+        <p>Spend is doubling every few minutes. Classic sign of a context explosion going vertical. We catch it right at the point it starts accelerating.</p>
+      </div>
+      <div class="signal-card">
+        <span class="signal-emoji">✅</span>
+        <h3>All clear this morning</h3>
+        <p>Agent behaved perfectly overnight. You wake up to a one-line summary. £2.41 spent. Everything green. Crack on with your day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section>
+  <div class="container">
+    <div class="cta-wrap reveal" id="cta">
+      <h2>Your agents are running<br><em>right now.</em></h2>
+      <p>Do you actually know if they're alright?</p>
+      <form class="cta-form" onsubmit="handleSignup(event)">
+        <input type="email" placeholder="your@email.com" required>
+        <button type="submit">Watch my agents →</button>
+      </form>
+      <p class="cta-footnote">Free during beta &nbsp;·&nbsp; No card needed &nbsp;·&nbsp; 2 minute setup</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:22px;height:22px;background:var(--ink);border-radius:6px;display:flex;align-items:center;justify-content:center">
+        <span style="width:6px;height:6px;background:#4ade80;border-radius:50%;display:block"></span>
+      </div>
+      <span style="font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink)">agentsitter</span>
+    </div>
+    <p>by <a href="https://comptexlabs.com" target="_blank">Comptex Labs</a> · Manchester, UK</p>
+  </div>
+  <div class="footer-links">
+    <a href="https://arena.trustlogdynamics.com" target="_blank">Live demo</a>
+    <a href="https://github.com/AnouarTrust/Trustlog-dynamics" target="_blank">GitHub</a>
+    <a href="https://x.com/Anouarbf2" target="_blank">X / Twitter</a>
+    <a href="mailto:anouar@trustlogdynamics.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(r => observer.observe(r));
+
+const sparks = document.querySelectorAll('#sparkline .spark');
+setInterval(() => {
+  sparks.forEach(s => {
+    s.style.height = (Math.random() * 55 + 25) + '%';
+    s.style.transition = 'height 0.9s cubic-bezier(0.34,1.56,0.64,1)';
+  });
+}, 2200);
+
+let cost = 2.41, calls = 847;
+setInterval(() => {
+  cost += Math.random() * 0.03;
+  calls += Math.floor(Math.random() * 3);
+  const el = document.getElementById('cost');
+  const cl = document.getElementById('calls');
+  if(el) el.textContent = '£' + cost.toFixed(2);
+  if(cl) cl.textContent = calls.toLocaleString();
+}, 3000);
+
+function handleSignup(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  const input = e.target.querySelector('input[type="email"]');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  fetch('https://trustlog-api.onrender.com/waitlist', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: input.value })
+  }).catch(() => {}).finally(() => {
+    btn.textContent = "You're on the list ✓";
+    btn.style.background = '#f0fdf4';
+    btn.style.color = '#15803d';
+    btn.style.border = '1.5px solid #bbf7d0';
+    input.value = '';
+  });
+}
+</script>
+</body>
+</html>
