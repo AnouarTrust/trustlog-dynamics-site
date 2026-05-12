@@ -4,309 +4,529 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agentsitter — The babysitter for your AI agents</title>
-<meta name="description" content="Your AI agents are out there right now, spending your money. Agentsitter watches them 24/7 and alerts you the moment something goes wrong.">
+<meta name="description" content="Your AI agents are out there right now, spending your money. Agentsitter watches them 24/7 and emails you every morning at 8am with exactly what happened.">
+<meta property="og:title" content="Agentsitter — The babysitter for your AI agents">
+<meta property="og:description" content="Daily email at 8am. Real call count. Real spend. No anomalies. pip install agentsitter">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#111009;--ink2:#2a2820;--cream:#faf8f3;--white:#ffffff;
-  --muted:#8a8678;--border:#e5e1d8;
-  --green:#1a8c4e;--green-bg:#edfaf3;--green-border:#a8ebc8;
-  --red:#c42b2b;--red-bg:#fdf2f2;--red-border:#f5b8b8;
-  --serif:'Fraunces',Georgia,serif;--sans:'Syne',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+  --cream:#faf9f6;--white:#ffffff;--ink:#1a1814;--ink2:#2e2b26;
+  --muted:#7a7570;--border:#e8e4dc;--border2:#d4cfc6;
+  --green:#16a34a;--green-bg:#f0fdf4;--green-border:#bbf7d0;--green-text:#15803d;
+  --red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;
+  --serif:'Lora',Georgia,serif;--sans:'Plus Jakarta Sans',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
 }
 html{scroll-behavior:smooth}
 body{font-family:var(--sans);background:var(--cream);color:var(--ink);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-nav{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:56px;background:rgba(250,248,243,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-.logo-box{width:26px;height:26px;background:var(--ink);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo-pulse{width:8px;height:8px;background:#4ade80;border-radius:50%;animation:pulse 2.5s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.65)}}
-.logo-name{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink);letter-spacing:-.01em}
-.nav-cta{background:var(--ink);color:var(--white);padding:.45rem 1.1rem;border-radius:100px;font-size:13px;font-weight:600;text-decoration:none;font-family:var(--sans);transition:opacity .15s;white-space:nowrap}
+
+/* NOTIFICATION */
+.notif{
+  position:fixed;bottom:1.25rem;right:1.25rem;z-index:999;
+  display:flex;align-items:flex-start;gap:.65rem;
+  background:var(--white);border:1.5px solid var(--border2);
+  border-radius:12px;padding:.85rem 1rem;width:240px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.09);
+  transform:translateY(110px);opacity:0;
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1),opacity .3s ease;
+  pointer-events:none;
+}
+.notif.show{transform:translateY(0);opacity:1}
+.notif.hide{transform:translateY(110px);opacity:0}
+.ni{width:26px;height:26px;border-radius:7px;background:var(--green-bg);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;margin-top:1px}
+.nt{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.nb{font-family:var(--mono);font-size:10.5px;color:var(--muted);line-height:1.5}
+.ntm{font-size:10px;color:#bbb;margin-top:3px;font-family:var(--mono)}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:60px;background:rgba(250,249,246,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:28px;height:28px;background:var(--ink);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-pulse{width:8px;height:8px;background:#4ade80;border-radius:50%;animation:breathe 2.5s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.75)}}
+.logo-name{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);letter-spacing:-.01em}
+.nav-right{display:flex;align-items:center;gap:1rem}
+.nav-pypi{font-family:var(--mono);font-size:12px;color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-pypi:hover{color:var(--ink)}
+.nav-cta{background:var(--ink);color:var(--white);padding:.5rem 1.1rem;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;transition:opacity .15s}
 .nav-cta:hover{opacity:.8}
-.hero{padding:3.5rem 1.5rem 3rem;text-align:center;max-width:600px;margin:0 auto}
-.live-badge{display:inline-flex;align-items:center;gap:7px;background:var(--green-bg);border:1px solid var(--green-border);color:var(--green);font-family:var(--mono);font-size:11px;font-weight:500;padding:.3rem .85rem;border-radius:100px;margin-bottom:1.75rem;letter-spacing:.06em;text-transform:uppercase}
-.badge-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;box-shadow:0 0 6px var(--green);flex-shrink:0}
-.hero h1{font-family:var(--serif);font-size:clamp(2.6rem,8vw,4rem);font-weight:300;line-height:1.1;letter-spacing:-.02em;margin-bottom:1.25rem;color:var(--ink)}
+
+/* HERO */
+.hero{padding:3.5rem 2rem 3rem;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;min-height:84vh}
+.hero-left{max-width:520px}
+.hero-tag{display:inline-flex;align-items:center;gap:7px;background:var(--green-bg);border:1px solid var(--green-border);color:var(--green-text);font-size:12px;font-weight:600;font-family:var(--mono);padding:.35rem .85rem;border-radius:100px;margin-bottom:2rem;letter-spacing:-.01em}
+.tag-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:breathe 2s infinite}
+.hero h1{font-family:var(--serif);font-size:clamp(2.4rem,4vw,3.6rem);font-weight:400;line-height:1.18;letter-spacing:-.02em;margin-bottom:1.5rem;color:var(--ink)}
 .hero h1 em{font-style:italic;color:var(--muted)}
-.hero-body{font-size:1.05rem;color:var(--muted);line-height:1.7;margin-bottom:2rem;max-width:420px;margin-left:auto;margin-right:auto}
+.hero-body{font-size:1.05rem;color:var(--muted);line-height:1.75;margin-bottom:2.25rem;max-width:420px}
 .hero-body strong{color:var(--ink);font-weight:600}
-.cta-form{display:flex;flex-direction:column;gap:10px;max-width:380px;margin:0 auto .75rem}
-.cta-form input{width:100%;height:52px;padding:0 1.25rem;border:1.5px solid var(--border);border-radius:14px;font-size:16px;font-family:var(--sans);background:var(--white);color:var(--ink);outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none}
-.cta-form input::placeholder{color:#c5c0b5}
-.cta-form input:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(17,16,9,.07)}
-.cta-btn{width:100%;height:52px;background:var(--ink);color:var(--white);border:none;border-radius:14px;font-size:16px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:opacity .15s,transform .1s;display:flex;align-items:center;justify-content:center}
-.cta-btn:hover{opacity:.85}
-.cta-btn:active{transform:scale(.99)}
-.cta-btn:disabled{opacity:.5;cursor:not-allowed}
-.cta-footnote{font-size:12px;color:#b5b0a5;text-align:center;display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap}
-.cta-footnote a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
-.widget-wrap{padding:0 1.5rem 3rem;max-width:500px;margin:0 auto}
-.monitor{background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:1.25rem;box-shadow:0 2px 16px rgba(0,0,0,.05);position:relative}
-.monitor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
-.agent-name{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink2)}
-.agent-dot{width:8px;height:8px;background:#4ade80;border-radius:50%;box-shadow:0 0 0 3px rgba(74,222,128,.2);animation:pulse 2s infinite;flex-shrink:0}
-.status-pill{font-family:var(--mono);font-size:11px;font-weight:500;padding:.25rem .65rem;border-radius:100px;letter-spacing:.05em}
-.status-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border)}
-.sparkline-area{background:var(--cream);border-radius:12px;padding:.85rem .85rem .6rem;margin-bottom:.85rem}
-.sparkline{display:flex;align-items:flex-end;gap:3px;height:48px;margin-bottom:.4rem}
-.spark{flex:1;border-radius:3px 3px 0 0;background:var(--border);transition:height 1s cubic-bezier(.34,1.56,.64,1)}
-.spark.ok{background:#86efac}
-.spark-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted)}
-.monitor-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem}
-.stat{background:var(--cream);border-radius:10px;padding:.6rem .75rem}
-.stat-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px}
-.stat-value{font-size:15px;font-weight:700;color:var(--ink)}
+
+/* FORM */
+.signup-group{display:flex;gap:8px;margin-bottom:1rem}
+.signup-group input{flex:1;height:46px;padding:0 1.1rem;border:1.5px solid var(--border2);border-radius:10px;font-size:15px;font-family:var(--sans);background:var(--white);color:var(--ink);outline:none;transition:border-color .15s}
+.signup-group input::placeholder{color:#bbb}
+.signup-group input:focus{border-color:var(--ink)}
+.signup-group button{height:46px;padding:0 1.4rem;background:var(--ink);color:var(--white);border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.signup-group button:hover{opacity:.85}
+.signup-group button:disabled{opacity:.5;cursor:not-allowed}
+.hero-footnote{font-size:13px;color:#aaa;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.hero-footnote a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+.success-box{display:none;background:var(--green-bg);border:1px solid var(--green-border);border-radius:10px;padding:1rem;margin-bottom:1rem}
+.success-box p{font-size:14px;color:var(--green-text);font-weight:500}
+
+/* HERO CARD */
+.hero-right{position:relative}
+.card-stack{position:relative;height:380px}
+.monitor-card{background:var(--white);border:1.5px solid var(--border);border-radius:20px;padding:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.06);position:absolute}
+.card-main{width:100%;top:0;left:0;right:0;z-index:3}
+.card-behind-1{width:94%;left:3%;top:14px;z-index:2;opacity:.6;transform:scale(.97)}
+.card-behind-2{width:88%;left:6%;top:26px;z-index:1;opacity:.3;transform:scale(.94)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.card-title{display:flex;align-items:center;gap:8px}
+.card-title-dot{width:8px;height:8px;background:#4ade80;border-radius:50%;box-shadow:0 0 0 3px rgba(74,222,128,.2);animation:breathe 2s infinite}
+.card-title span{font-size:13px;font-weight:600;color:var(--ink2)}
+.badge{font-family:var(--mono);font-size:11px;font-weight:500;padding:.25rem .7rem;border-radius:6px;letter-spacing:.04em}
+.badge-green{background:var(--green-bg);color:var(--green-text);border:1px solid var(--green-border)}
+.sparkline-wrap{background:var(--cream);border-radius:12px;padding:1rem 1rem .75rem;margin-bottom:1rem}
+.sparkline{display:flex;align-items:flex-end;gap:4px;height:52px;margin-bottom:.5rem}
+.bar{flex:1;border-radius:3px 3px 0 0;background:var(--border2)}
+.bar.active{background:#86efac}
+.sparkline-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--muted)}
+.card-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+.stat-box{background:var(--cream);border-radius:10px;padding:.65rem .75rem}
+.stat-label{font-size:10px;font-family:var(--mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+.stat-value{font-size:15px;font-weight:600;color:var(--ink)}
 .stat-value.green{color:var(--green)}
-.alert-bubble{position:absolute;bottom:-16px;right:12px;background:var(--white);border:1.5px solid var(--red-border);border-radius:14px;padding:.75rem 1rem;box-shadow:0 6px 24px rgba(196,43,43,.12);width:200px;animation:popIn .4s 1.2s cubic-bezier(.34,1.56,.64,1) both}
-@keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
-.alert-row{display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.alert-icon{width:18px;height:18px;background:var(--red-bg);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.alert-card{position:absolute;bottom:-20px;right:-20px;width:220px;background:var(--white);border:1.5px solid var(--red-border);border-radius:14px;padding:1rem;box-shadow:0 8px 32px rgba(220,38,38,.1);z-index:10;animation:slideInAlert .5s 1s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes slideInAlert{from{opacity:0;transform:translateY(16px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+.alert-header{display:flex;align-items:center;gap:7px;margin-bottom:.5rem}
+.alert-icon{width:22px;height:22px;background:var(--red-bg);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
 .alert-title{font-size:12px;font-weight:700;color:var(--red)}
-.alert-body{font-size:11px;color:var(--muted);line-height:1.4}
+.alert-body{font-size:11.5px;color:var(--muted);line-height:1.5}
 .alert-body strong{color:var(--ink);font-weight:600}
-hr{border:none;border-top:1px solid var(--border)}
-.incident{padding:3rem 1.5rem;max-width:600px;margin:0 auto}
-.tag-pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;padding:.3rem .75rem;border-radius:100px;margin-bottom:1.25rem}
-.tag-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border)}
-.incident-num{font-family:var(--serif);font-size:clamp(4rem,18vw,7rem);font-weight:300;color:var(--red);font-style:italic;line-height:1;margin-bottom:1rem}
-.incident h2{font-family:var(--serif);font-size:clamp(1.4rem,4vw,1.9rem);font-weight:300;line-height:1.3;margin-bottom:1rem}
-.incident h2 em{font-style:italic;color:var(--muted)}
-.incident p{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:.75rem}
-.incident p strong{color:var(--ink);font-weight:600}
-.timeline{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:.6rem}
-.tl-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+
+/* CONTENT */
+.content{max-width:860px;margin:0 auto;padding:0 2rem}
+section{padding:4rem 0}
+.section-label{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.75rem}
+.section-h{font-family:var(--serif);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:400;line-height:1.2;margin-bottom:3rem;letter-spacing:-.01em}
+.section-h em{font-style:italic;color:var(--muted)}
+
+/* LEADERBOARD */
+.board-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.board-label{font-size:12px;color:var(--muted);font-weight:500}
+.live-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;color:var(--green);background:var(--green-bg);border:1px solid var(--green-border);padding:.15rem .5rem;border-radius:100px;letter-spacing:.06em}
+.ldot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:breathe 2s infinite}
+.tw{border:1.5px solid var(--border);border-radius:12px;overflow:hidden;background:var(--white)}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:.6rem 1.25rem;text-align:left;background:var(--cream);border-bottom:1px solid var(--border)}
+thead th:not(:first-child){text-align:right}
+tbody td{padding:.85rem 1.25rem;border-bottom:1px solid var(--border);font-size:14px;color:var(--muted)}
+tbody tr:last-child td{border-bottom:none}
+tbody td:not(:first-child){text-align:right;font-family:var(--mono);font-size:13px}
+tbody tr:hover td{background:var(--cream)}
+.ac{display:flex;align-items:center;gap:10px}
+.sd{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--green)}
+.an{font-size:13px;font-weight:600;color:var(--ink);font-family:var(--mono)}
+.ab{font-size:11px;color:var(--muted);margin-top:1px}
+.stag{font-family:var(--mono);font-size:11px;font-weight:500;padding:.2rem .55rem;border-radius:5px;letter-spacing:.04em;background:var(--green-bg);color:var(--green-text);border:1px solid var(--green-border)}
+.add-row td{background:var(--cream);padding:.75rem 1.25rem}
+.add-a{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);text-decoration:none;border:1.5px dashed var(--border2);border-radius:7px;padding:.35rem .85rem;transition:all .15s;font-weight:500}
+.add-a:hover{border-color:var(--ink);color:var(--ink);border-style:solid}
+
+/* EMAIL SECTION */
+.email-section{border:1.5px solid var(--border);border-radius:24px;overflow:hidden;background:var(--white)}
+.email-section-top{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--border)}
+.email-section-label{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.5rem}
+.email-section-top h3{font-family:var(--serif);font-size:1.5rem;font-weight:400;line-height:1.3;margin-bottom:.5rem}
+.email-section-top h3 em{font-style:italic;color:var(--muted)}
+.email-section-top p{font-size:14px;color:var(--muted);line-height:1.7}
+.email-meta{display:flex;align-items:center;gap:1rem;padding:1rem 2.5rem;background:var(--cream);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.email-meta-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.email-meta-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.email-img-wrap{padding:1.5rem 2.5rem 2rem}
+.email-img-wrap img{width:100%;max-width:360px;display:block;margin:0 auto;border-radius:14px;border:1.5px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,0.07)}
+
+/* INCIDENT */
+.incident-wrap{background:var(--white);border:1.5px solid var(--border);border-radius:24px;overflow:hidden}
+.incident-top{padding:3rem;display:grid;grid-template-columns:auto 1fr;gap:3rem;align-items:start;border-bottom:1px solid var(--border)}
+.incident-num{font-family:var(--serif);font-size:clamp(5rem,10vw,8rem);font-weight:400;color:var(--red);line-height:1;font-style:italic}
+.incident-tag{display:inline-flex;align-items:center;gap:6px;background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);font-size:11px;font-family:var(--mono);font-weight:500;padding:.3rem .75rem;border-radius:100px;margin-bottom:1rem}
+.incident-content h3{font-family:var(--serif);font-size:clamp(1.3rem,2.5vw,1.8rem);font-weight:400;line-height:1.3;margin-bottom:1rem}
+.incident-content h3 em{font-style:italic;color:var(--muted)}
+.incident-content p{font-size:15px;color:var(--muted);line-height:1.75;max-width:480px}
+.incident-content p+p{margin-top:.75rem}
+.highlight{color:var(--ink);font-weight:500}
+.incident-bottom{padding:1.5rem 3rem;display:flex;align-items:center;gap:2rem;background:var(--cream);flex-wrap:wrap}
+.tl-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
 .tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .tl-dot.red{background:var(--red)}.tl-dot.green{background:var(--green)}
-.tl-item.good{color:var(--green);font-weight:600}
-.how{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3rem 1.5rem}
-.how-inner{max-width:600px;margin:0 auto}
-.section-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.75rem}
-.section-h{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.5rem);font-weight:300;line-height:1.2;letter-spacing:-.015em;margin-bottom:2.5rem}
-.section-h em{font-style:italic;color:var(--green)}
-.steps{display:flex;flex-direction:column}
-.step{padding:1.5rem 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:36px 1fr;gap:1rem;align-items:start}
-.step:last-child{border-bottom:none}
-.step-n{width:32px;height:32px;background:var(--cream);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--muted);flex-shrink:0;margin-top:2px}
-.step h3{font-size:16px;font-weight:600;margin-bottom:.4rem;color:var(--ink)}
-.step p{font-size:14px;color:var(--muted);line-height:1.65}
-.code-block{background:var(--ink);border-radius:10px;padding:.85rem 1rem;font-family:var(--mono);font-size:12px;color:#86efac;line-height:1.7;margin-top:.85rem;overflow-x:auto}
+.tl-sep{width:24px;height:1px;background:var(--border2)}
+
+/* HOW */
+.how-bg{background:var(--white);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:20px;overflow:hidden;border:1.5px solid var(--border)}
+.step{background:var(--white);padding:2.25rem 2rem}
+.step-n{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.08em;margin-bottom:1.5rem;display:flex;align-items:center;gap:8px}
+.step-n::after{content:'';flex:1;height:1px;background:var(--border)}
+.step h3{font-size:17px;font-weight:600;margin-bottom:.6rem}
+.step p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:1.25rem}
+.code-block{background:var(--ink);border-radius:10px;padding:.9rem 1.1rem;font-family:var(--mono);font-size:12.5px;color:#86efac;line-height:1.65}
 .code-block .dim{color:#4b5563}
-.signals{padding:3rem 1.5rem;max-width:600px;margin:0 auto}
-.signals-grid{display:grid;grid-template-columns:1fr;gap:.85rem}
-.signal-card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:1.5rem}
-.signal-emoji{font-size:24px;margin-bottom:1rem;display:block}
-.signal-card h3{font-size:16px;font-weight:600;margin-bottom:.4rem}
-.signal-card p{font-size:14px;color:var(--muted);line-height:1.65}
-.bottom-cta{background:var(--ink);padding:3.5rem 1.5rem;text-align:center}
-.bottom-cta h2{font-family:var(--serif);font-size:clamp(1.8rem,6vw,3rem);font-weight:300;color:var(--white);line-height:1.15;margin-bottom:.75rem;letter-spacing:-.02em}
-.bottom-cta h2 em{font-style:italic;color:#4ade80}
-.bottom-cta p{color:rgba(255,255,255,.5);font-size:15px;margin-bottom:2rem}
-.bottom-cta .cta-form{max-width:360px}
-.bottom-cta .cta-form input{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:var(--white)}
-.bottom-cta .cta-form input::placeholder{color:rgba(255,255,255,.3)}
-.bottom-cta .cta-form input:focus{border-color:rgba(255,255,255,.4);box-shadow:none}
-.bottom-cta .cta-btn{background:#4ade80;color:var(--ink)}
-.bottom-cta-note{font-size:12px;color:rgba(255,255,255,.25);margin-top:.75rem}
-.success-msg{display:none;background:var(--green-bg);border:1.5px solid var(--green-border);border-radius:14px;padding:1.25rem;text-align:center;max-width:380px;margin:0 auto}
-.success-msg h3{font-family:var(--serif);font-size:1.2rem;font-weight:400;margin-bottom:.35rem}
-.success-msg p{font-size:14px;color:var(--muted);line-height:1.6}
-footer{padding:1.5rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:1rem;align-items:center;text-align:center}
-.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center}
+
+/* PYPI STRIP */
+.pypi-strip{background:var(--ink);border-radius:16px;padding:1.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+.pypi-left p{font-size:14px;color:rgba(255,255,255,.5);margin-bottom:.35rem}
+.pypi-left .pypi-cmd{font-family:var(--mono);font-size:15px;color:#4ade80;font-weight:500}
+.pypi-right a{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);font-size:13px;font-weight:500;padding:.55rem 1.1rem;border-radius:8px;text-decoration:none;transition:all .15s;font-family:var(--mono)}
+.pypi-right a:hover{background:rgba(255,255,255,.14);color:var(--white)}
+
+/* BOTTOM CTA */
+.cta-section{background:var(--ink);padding:5rem 2rem;text-align:center}
+.cta-section h2{font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:400;color:var(--white);line-height:1.2;margin-bottom:.75rem;letter-spacing:-.02em}
+.cta-section h2 em{font-style:italic;opacity:.6}
+.cta-section p{color:rgba(255,255,255,.5);font-size:15px;margin-bottom:2.5rem}
+.cta-form{display:flex;gap:8px;max-width:420px;margin:0 auto 1rem}
+.cta-form input{flex:1;height:48px;padding:0 1.25rem;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:10px;font-size:15px;font-family:var(--sans);color:var(--white);outline:none;transition:border-color .15s;min-width:0}
+.cta-form input::placeholder{color:rgba(255,255,255,.3)}
+.cta-form input:focus{border-color:rgba(255,255,255,.4)}
+.cta-form button{height:48px;padding:0 1.5rem;background:#4ade80;color:var(--ink);border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.cta-form button:hover{opacity:.88}
+.cta-note{font-size:12px;color:rgba(255,255,255,.25)}
+#bottom-success{color:#4ade80;font-size:14px;margin-bottom:.5rem}
+
+/* FOOTER */
+footer{padding:1.5rem 2.5rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;max-width:100%}
+.footer-left{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.footer-left p{font-size:13px;color:var(--muted)}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap}
 .footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .15s}
 .footer-links a:hover{color:var(--ink)}
-footer p{font-size:12px;color:#b5b0a5}
-@media(min-width:700px){
-  nav{padding:0 2.5rem}
-  .hero{padding:5rem 2rem 4rem}
-  .widget-wrap{padding:0 2rem 4rem}
-  .incident{padding:4rem 2rem}
-  .how{padding:4rem 2rem}
-  .signals{padding:4rem 2rem}
-  .signals-grid{grid-template-columns:repeat(3,1fr)}
-  .cta-form{flex-direction:row}
-  .cta-form input{border-radius:100px}
-  .cta-btn{border-radius:100px;white-space:nowrap;width:auto;padding:0 1.5rem;flex-shrink:0}
-  .bottom-cta .cta-form{flex-direction:row}
-  .alert-bubble{right:-20px;bottom:-20px}
-  footer{flex-direction:row;justify-content:space-between;text-align:left;padding:1.5rem 2.5rem}
+
+/* MOBILE */
+@media(max-width:768px){
+  nav{padding:0 1.25rem}
+  .nav-pypi{display:none}
+  .hero{grid-template-columns:1fr;gap:3rem;min-height:auto;padding:3rem 1.25rem 2rem}
+  .hero-right{display:none}
+  .signup-group{flex-direction:column}
+  .incident-top{grid-template-columns:1fr;gap:2rem;padding:2rem}
+  .incident-bottom{padding:1.25rem 2rem;gap:1rem}
+  .incident-bottom .tl-sep{display:none}
+  .steps{grid-template-columns:1fr}
+  .content{padding:0 1.25rem}
+  .cta-form{flex-direction:column}
+  footer{flex-direction:column;align-items:flex-start}
+  .email-section-top{padding:1.5rem}
+  .email-meta{padding:.85rem 1.5rem;gap:.65rem}
+  .email-meta-item{font-size:10px}
+  .email-img-wrap{padding:1rem 1.5rem 1.5rem}
+  .pypi-strip{flex-direction:column;align-items:flex-start}
+
+  /* TABLE: keep all four columns, compress to fit mobile */
+  .tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:420px}
+  thead th{padding:.5rem .65rem;font-size:9px;letter-spacing:.06em}
+  tbody td{padding:.7rem .65rem;font-size:12px}
+  tbody td:not(:first-child){font-size:11px}
+  .an{font-size:11px}
+  .ab{display:none}
+  .sd{width:6px;height:6px}
+  .stag{font-size:10px;padding:.15rem .4rem}
+  .add-a{font-size:12px}
 }
 </style>
 </head>
 <body>
 
+<!-- NOTIFICATION -->
+<div class="notif" id="notif">
+  <div class="ni" id="ni">🟢</div>
+  <div>
+    <div class="nt" id="nt">agentsitter</div>
+    <div class="nb" id="nb">arena-trading-agent · healthy</div>
+    <div class="ntm">just now</div>
+  </div>
+</div>
+
+<!-- NAV -->
 <nav>
   <a href="/" class="logo">
-    <div class="logo-box"><span class="logo-pulse"></span></div>
+    <div class="logo-mark"><span class="logo-pulse"></span></div>
     <span class="logo-name">agentsitter</span>
   </a>
-  <a href="/start" class="nav-cta">Get early access</a>
+  <div class="nav-right">
+    <a href="https://pypi.org/project/agentsitter/" target="_blank" class="nav-pypi">pip install agentsitter</a>
+    <a href="/start" class="nav-cta">Get started</a>
+  </div>
 </nav>
 
-<section class="hero">
-  <div class="live-badge"><span class="badge-dot"></span>Live API · Watching 24/7</div>
-  <h1>Your AI agent is<br>out there right now.<br><em>Is it behaving?</em></h1>
-  <p class="hero-body">Somewhere right now a founder is waking up to an API bill they weren't expecting. <strong>Agentsitter exists so that founder isn't you.</strong></p>
-
-  <form class="cta-form" id="hero-form" onsubmit="handleSignup(event,'hero')">
-    <input type="email" placeholder="your@email.com" required autocomplete="email">
-    <button type="submit" class="cta-btn" id="hero-btn">Get my API key →</button>
-  </form>
-  <div class="success-msg" id="hero-success">
-    <h3>🟢 Check your inbox.</h3>
-    <p>Your API key is landing now. Check spam if you don't see it in 30 seconds.</p>
-  </div>
-  <div class="cta-footnote" style="margin-top:.75rem">
-    <span>✓ Free</span><span>✓ No credit card</span><span>✓ 2 minute setup</span>
-    <a href="https://arena.trustlogdynamics.com" target="_blank">See live demo →</a>
-  </div>
-</section>
-
-<div class="widget-wrap">
-  <div class="monitor">
-    <div class="monitor-header">
-      <div class="agent-name"><span class="agent-dot"></span>my-research-agent</div>
-      <span class="status-pill status-green">● HEALTHY</span>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-tag"><span class="tag-dot"></span>Live · Watching 24/7</div>
+    <h1>Your AI agent is out there right now.<br><em>Is it behaving?</em></h1>
+    <p class="hero-body">Somewhere right now a founder is waking up to an API bill they weren't expecting. <strong>Agentsitter exists so that founder isn't you.</strong> Daily email at 8am. Real numbers. No guessing.</p>
+    <form class="signup-group" id="hero-form" onsubmit="handleSignup(event,'hero')">
+      <input type="email" placeholder="your@email.com" required>
+      <button type="submit" id="hero-btn">Get my API key →</button>
+    </form>
+    <div class="success-box" id="hero-success"><p>🟢 Check your inbox — your API key is on its way.</p></div>
+    <div class="hero-footnote">
+      <span>✓ Free</span><span>✓ No credit card</span><span>✓ 2 minute setup</span>
+      <a href="https://arena.trustlogdynamics.com" target="_blank">See live demo →</a>
     </div>
-    <div class="sparkline-area">
-      <div class="sparkline" id="sparkline">
-        <div class="spark ok" style="height:35%"></div><div class="spark ok" style="height:52%"></div>
-        <div class="spark ok" style="height:40%"></div><div class="spark ok" style="height:68%"></div>
-        <div class="spark ok" style="height:44%"></div><div class="spark ok" style="height:58%"></div>
-        <div class="spark ok" style="height:72%"></div><div class="spark ok" style="height:48%"></div>
-        <div class="spark ok" style="height:36%"></div><div class="spark ok" style="height:62%"></div>
-        <div class="spark ok" style="height:45%"></div><div class="spark ok" style="height:54%"></div>
+  </div>
+
+  <div class="hero-right">
+    <div class="card-stack">
+      <div class="monitor-card card-behind-2"></div>
+      <div class="monitor-card card-behind-1"></div>
+      <div class="monitor-card card-main">
+        <div class="card-header">
+          <div class="card-title"><span class="card-title-dot"></span><span>my-research-agent</span></div>
+          <span class="badge badge-green">● HEALTHY</span>
+        </div>
+        <div class="sparkline-wrap">
+          <div class="sparkline" id="sparkline">
+            <div class="bar active" style="height:35%"></div><div class="bar active" style="height:52%"></div>
+            <div class="bar active" style="height:40%"></div><div class="bar active" style="height:68%"></div>
+            <div class="bar active" style="height:44%"></div><div class="bar active" style="height:58%"></div>
+            <div class="bar active" style="height:72%"></div><div class="bar active" style="height:48%"></div>
+            <div class="bar active" style="height:36%"></div><div class="bar active" style="height:62%"></div>
+            <div class="bar active" style="height:45%"></div><div class="bar active" style="height:54%"></div>
+          </div>
+          <div class="sparkline-labels"><span>12 hrs ago</span><span>6 hrs ago</span><span>now</span></div>
+        </div>
+        <div class="card-stats">
+          <div class="stat-box"><div class="stat-label">Spent today</div><div class="stat-value" id="cost">£2.41</div></div>
+          <div class="stat-box"><div class="stat-label">API calls</div><div class="stat-value" id="calls">847</div></div>
+          <div class="stat-box"><div class="stat-label">Status</div><div class="stat-value green">Green</div></div>
+        </div>
       </div>
-      <div class="spark-labels"><span>12 hrs ago</span><span>6 hrs ago</span><span>now</span></div>
-    </div>
-    <div class="monitor-stats">
-      <div class="stat"><div class="stat-label">Spent today</div><div class="stat-value" id="cost">£2.41</div></div>
-      <div class="stat"><div class="stat-label">API calls</div><div class="stat-value" id="calls">847</div></div>
-      <div class="stat"><div class="stat-label">Status</div><div class="stat-value green">Green</div></div>
-    </div>
-    <div class="alert-bubble">
-      <div class="alert-row"><div class="alert-icon">🔴</div><span class="alert-title">Loop detected!</span></div>
-      <p class="alert-body"><strong>scraper-agent</strong> made 200 identical calls. Cost spiking.</p>
+      <div class="alert-card">
+        <div class="alert-header"><div class="alert-icon">🔴</div><span class="alert-title">Loop detected!</span></div>
+        <p class="alert-body"><strong>scraper-agent</strong> made 200 identical calls. Cost spiking.</p>
+      </div>
     </div>
   </div>
 </div>
 
-<hr>
+<!-- CONTENT -->
+<div class="content">
 
-<section class="incident">
-  <div class="tag-pill tag-red">⚠ Real incident · 2025</div>
-  <div class="incident-num">$47k</div>
-  <h2>Two agents. Talking to each other.<br>Non-stop. <em>For eleven days.</em></h2>
-  <p>Nobody noticed. Nobody got an alert. The bill quietly accumulated while the team assumed everything was running fine.</p>
-  <p><strong>Agentsitter would have caught it on day one.</strong> The moment costs stopped looking normal, the founder would have had a text. Not a $47,000 invoice.</p>
-  <div class="timeline">
-    <div class="tl-item"><span class="tl-dot red"></span>Day 1 — Loop starts silently</div>
-    <div class="tl-item"><span class="tl-dot red"></span>Day 4 — Bill hits $8,000</div>
-    <div class="tl-item"><span class="tl-dot red"></span>Day 11 — Someone checks the invoice</div>
-    <div class="tl-item good"><span class="tl-dot green"></span>With Agentsitter — alerted on day 1</div>
-  </div>
-</section>
+  <!-- LEADERBOARD -->
+  <section>
+    <div class="board-top">
+      <span class="board-label">Agents being watched right now</span>
+      <span class="live-badge"><span class="ldot"></span>live</span>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Agent</th><th>Calls today</th><th>Spend today</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="ac">
+                <span class="sd"></span>
+                <div><div class="an">arena-trading-agent</div><div class="ab">watched by agentsitter · comptexlabs · manchester</div></div>
+              </div>
+            </td>
+            <td id="lc">847</td>
+            <td id="ls">£0.02313</td>
+            <td><span class="stag">GREEN</span></td>
+          </tr>
+          <tr class="add-row">
+            <td colspan="4">
+              <a href="/start" class="add-a">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                Add your agent
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-<hr>
+  <!-- EMAIL SECTION -->
+  <section>
+    <div class="email-section">
+      <div class="email-section-top">
+        <div class="email-section-label">What you wake up to</div>
+        <h3>Every morning at 8am.<br><em>Your agent's full overnight report.</em></h3>
+        <p>Exactly how many calls it made, what it spent, and whether anything looked wrong. In your inbox before you've made coffee.</p>
+      </div>
+      <div class="email-meta">
+        <div class="email-meta-item"><span class="email-meta-dot"></span>Sent at 08:05 every morning</div>
+        <div class="email-meta-item"><span class="email-meta-dot"></span>Real call count · Real spend</div>
+        <div class="email-meta-item"><span class="email-meta-dot"></span>Quant-powered anomaly detection</div>
+      </div>
+      <div class="email-img-wrap">
+        <!-- REPLACE email-screenshot.png with your real screenshot file -->
+        <img src="email-screenshot.png" alt="Agentsitter daily digest email showing Status GREEN, 1000 API calls, £0.0272 spend, no anomalies">
+      </div>
+    </div>
+  </section>
 
-<section class="how" id="how">
-  <div class="how-inner">
+  <!-- INCIDENT -->
+  <section>
+    <div class="section-label">Why this exists</div>
+    <div class="incident-wrap">
+      <div class="incident-top">
+        <div>
+          <div class="incident-tag">⚠ Real incident · 2025</div>
+          <div class="incident-num">$47k</div>
+        </div>
+        <div class="incident-content">
+          <h3>Two agents. Talking to each other. Non-stop. <em>For eleven days.</em></h3>
+          <p>Nobody noticed. Nobody got an alert. The bill quietly accumulated while the team assumed everything was fine.</p>
+          <p><span class="highlight">Agentsitter would have caught it on day one.</span> The moment costs stopped looking normal, the founder would have had an email. Not a $47,000 invoice.</p>
+        </div>
+      </div>
+      <div class="incident-bottom">
+        <div class="tl-item"><span class="tl-dot red"></span>Day 1 — Loop starts</div>
+        <div class="tl-sep"></div>
+        <div class="tl-item"><span class="tl-dot red"></span>Day 4 — Cost hits $8k</div>
+        <div class="tl-sep"></div>
+        <div class="tl-item"><span class="tl-dot red"></span>Day 11 — Someone checks the bill</div>
+        <div class="tl-sep"></div>
+        <div class="tl-item" style="color:var(--green);font-weight:600"><span class="tl-dot green"></span>With Agentsitter — alerted day 1</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PYPI -->
+  <section style="padding-top:0">
+    <div class="pypi-strip">
+      <div class="pypi-left">
+        <p>Available on PyPI. Works with OpenAI, Anthropic, or anything else.</p>
+        <div class="pypi-cmd">pip install agentsitter</div>
+      </div>
+      <div class="pypi-right">
+        <a href="https://pypi.org/project/agentsitter/" target="_blank">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          View on PyPI
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how-bg">
+  <div class="content" style="padding-top:4rem;padding-bottom:4rem">
     <div class="section-label">How it works</div>
-    <h2 class="section-h">Two lines of code.<br><em>Then forget about it.</em></h2>
+    <h2 class="section-h">Three lines of code.<br><em>Then forget about it.</em></h2>
     <div class="steps">
       <div class="step">
-        <div class="step-n">1</div>
-        <div>
-          <h3>Get your API key</h3>
-          <p>Enter your email above. Your unique key lands in your inbox in 30 seconds. Free. No card needed.</p>
-        </div>
+        <div class="step-n">01</div>
+        <h3>Get your API key</h3>
+        <p>Enter your email. Your unique key lands in your inbox in 30 seconds. Free. No card needed.</p>
+        <div class="code-block"><span class="dim">pip install</span> agentsitter</div>
       </div>
       <div class="step">
-        <div class="step-n">2</div>
-        <div>
-          <h3>Add two lines to your agent</h3>
-          <p>Download agentsitter.py from GitHub and drop it in your project. Works with OpenAI, Anthropic, or anything else.</p>
-          <div class="code-block"><span class="dim">import</span> agentsitter<br>sitter = agentsitter.watch(<br>&nbsp;&nbsp;api_key=<span style="color:#fde68a">"agt_your_key"</span>,<br>&nbsp;&nbsp;alert=<span style="color:#fde68a">"you@email.com"</span>)<br><br><span class="dim"># After every API call:</span><br>sitter.track(cost=0.04)</div>
-        </div>
+        <div class="step-n">02</div>
+        <h3>Add three lines</h3>
+        <p>Drop it into your agent. Works with OpenAI, Anthropic, Groq, or any LLM.</p>
+        <div class="code-block"><span class="dim">import</span> agentsitter<br>sitter = agentsitter.watch(<br>&nbsp;&nbsp;api_key=<span style="color:#fde68a">"agt_xxx"</span>,<br>&nbsp;&nbsp;alert=<span style="color:#fde68a">"you@email.com"</span>)<br><span class="dim"># after every call:</span><br>sitter.track(cost=0.04)</div>
       </div>
       <div class="step">
-        <div class="step-n">3</div>
-        <div>
-          <h3>Wake up to a GREEN every morning</h3>
-          <p>Daily email at 8am. Your agent's health. Real numbers. If something went wrong overnight, you already know. No news is good news.</p>
-        </div>
+        <div class="step-n">03</div>
+        <h3>Wake up to GREEN</h3>
+        <p>Daily email at 8am. Real call count. Real spend. If something went wrong overnight, you already know before you open your laptop.</p>
       </div>
     </div>
   </div>
 </section>
 
-<hr>
-
-<section class="signals">
-  <div class="section-label">What we watch for</div>
-  <h2 class="section-h">Three things that quietly<br><em>destroy your budget.</em></h2>
-  <div class="signals-grid">
-    <div class="signal-card"><span class="signal-emoji">🔁</span><h3>Stuck in a loop</h3><p>Your agent repeating the same call endlessly. We spot the pattern and alert you before it costs thousands.</p></div>
-    <div class="signal-card"><span class="signal-emoji">📈</span><h3>Costs snowballing</h3><p>Spend doubling every few minutes. We catch it right at the inflection point before it becomes a crisis.</p></div>
-    <div class="signal-card"><span class="signal-emoji">✅</span><h3>All clear this morning</h3><p>Agent behaved perfectly. £2.41 spent. Everything green. One email. Crack on with your day.</p></div>
-  </div>
-</section>
-
-<section class="bottom-cta">
+<!-- BOTTOM CTA -->
+<section class="cta-section">
   <h2>Your agents are running<br><em>right now.</em></h2>
   <p>Do you actually know if they're alright?</p>
-  <form class="cta-form" id="bottom-form" onsubmit="handleSignup(event,'bottom')">
-    <input type="email" placeholder="your@email.com" required autocomplete="email">
-    <button type="submit" class="cta-btn" id="bottom-btn">Get my API key →</button>
+  <form class="cta-form" onsubmit="handleSignup(event,'bottom')">
+    <input type="email" placeholder="your@email.com" required>
+    <button type="submit" id="bottom-btn">Watch my agents →</button>
   </form>
-  <div class="success-msg" id="bottom-success" style="background:rgba(255,255,255,.08);border-color:rgba(74,222,128,.3)">
-    <h3 style="color:#fff">🟢 Check your inbox.</h3>
-    <p style="color:rgba(255,255,255,.5)">Your API key is on its way.</p>
-  </div>
-  <p class="bottom-cta-note">Free during beta · No card · 2 minute setup</p>
+  <div id="bottom-success" style="display:none">🟢 Check your inbox — your API key is on its way.</div>
+  <p class="cta-note">Free · No card · pip install agentsitter</p>
 </section>
 
+<!-- FOOTER -->
 <footer>
-  <div class="logo">
-    <div class="logo-box"><span class="logo-pulse"></span></div>
-    <span class="logo-name">agentsitter</span>
+  <div class="footer-left">
+    <a href="/" class="logo"><div class="logo-mark"><span class="logo-pulse"></span></div><span class="logo-name">agentsitter</span></a>
+    <p>made by anouar. built in manchester.</p>
   </div>
   <div class="footer-links">
     <a href="https://arena.trustlogdynamics.com" target="_blank">Live demo</a>
-    <a href="https://github.com/AnouarTrust/agentsitter" target="_blank">GitHub</a>
+    <a href="https://pypi.org/project/agentsitter/" target="_blank">PyPI</a>
     <a href="/start">Get started</a>
     <a href="mailto:anouar@trustlogdynamics.com">Contact</a>
   </div>
-  <p>Built in Manchester by Anouar · Comptex Labs</p>
 </footer>
 
 <script>
-const sparks=document.querySelectorAll('#sparkline .spark');
-setInterval(()=>{sparks.forEach(s=>{s.style.height=(Math.random()*55+25)+'%';s.style.transition='height 1s cubic-bezier(.34,1.56,.64,1)'})},2500);
+// NOTIFICATIONS
+const msgs=[
+  {icon:'🟢',title:'arena-trading-agent',body:'calls increasing · status healthy'},
+  {icon:'🟢',title:'arena-trading-agent',body:'no anomalies detected · all clear'},
+  {icon:'🔴',title:'agentsitter alert',body:'loop detected · caught at 2am'},
+  {icon:'🟢',title:'arena-trading-agent',body:'1,000 calls · £0.03 · healthy'},
+];
+let mi=0;
+const notif=document.getElementById('notif');
+function showNotif(){
+  const m=msgs[mi%msgs.length];mi++;
+  document.getElementById('ni').textContent=m.icon;
+  document.getElementById('nt').textContent=m.title;
+  document.getElementById('nb').textContent=m.body;
+  notif.classList.remove('hide');notif.classList.add('show');
+  setTimeout(()=>{notif.classList.remove('show');notif.classList.add('hide')},4500);
+}
+setTimeout(showNotif,3000);
+setInterval(showNotif,20000);
 
+// SPARKLINE
+const bars=document.querySelectorAll('#sparkline .bar.active');
+setInterval(()=>{bars.forEach(b=>{b.style.height=(Math.random()*55+25)+'%';b.style.transition='height .9s ease'})},2200);
+
+// HERO CARD STATS (mock agent, ticks to feel live)
 let cost=2.41,calls=847;
 setInterval(()=>{
-  cost+=Math.random()*.04;calls+=Math.floor(Math.random()*4);
+  cost+=Math.random()*.04;calls+=Math.floor(Math.random()*3);
   const c=document.getElementById('cost'),k=document.getElementById('calls');
   if(c)c.textContent='£'+cost.toFixed(2);
   if(k)k.textContent=calls.toLocaleString();
 },3500);
 
+// LEADERBOARD — arena-trading-agent real data, seeded and ticking
+let lc=847,lcc=0.02313;
+function tickLeaderboard(){
+  lc+=Math.floor(Math.random()*3)+1;
+  lcc+=Math.random()*0.000028+0.000022;
+  const el=document.getElementById('lc');
+  const es=document.getElementById('ls');
+  if(el)el.textContent=lc.toLocaleString();
+  if(es)es.textContent='£'+lcc.toFixed(5);
+}
+setInterval(tickLeaderboard,10000);
+
+// SIGNUP
 async function handleSignup(e,id){
   e.preventDefault();
-  const form=e.target,btn=document.getElementById(id+'-btn'),successEl=document.getElementById(id+'-success');
-  const email=form.querySelector('input[type="email"]').value;
+  const btn=document.getElementById(id+'-btn');
+  const ok=document.getElementById(id+'-success');
+  const email=e.target.querySelector('input').value;
   btn.textContent='Sending...';btn.disabled=true;
   try{
-    const res=await fetch('https://trustlog-api.onrender.com/onboard',{
-      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})
-    });
-    const data=await res.json();
-    if(data.success){form.style.display='none';successEl.style.display='block'}
-    else{btn.textContent='Get my API key →';btn.disabled=false}
-  }catch(err){btn.textContent='Get my API key →';btn.disabled=false}
+    const r=await fetch('https://trustlog-api.onrender.com/onboard',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})});
+    const d=await r.json();
+    if(d.success){e.target.style.display='none';ok.style.display='block';}
+    else{btn.textContent=id==='hero'?'Get my API key →':'Watch my agents →';btn.disabled=false;}
+  }catch(err){btn.textContent=id==='hero'?'Get my API key →':'Watch my agents →';btn.disabled=false;}
 }
 </script>
 </body>
