@@ -405,10 +405,7 @@ footer{padding:1.5rem 2.5rem;border-top:1px solid var(--border);display:flex;ali
         <div class="pypi-cmd">pip install agentsitter</div>
       </div>
       <div class="pypi-right">
-        <a href="https://pypi.org/project/agentsitter/" target="_blank">
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          View on PyPI
-        </a>
+        <a href="/start">Get started free →</a>
       </div>
     </div>
   </section>
@@ -431,7 +428,8 @@ footer{padding:1.5rem 2.5rem;border-top:1px solid var(--border);display:flex;ali
         <div class="step-n">02</div>
         <h3>Add three lines</h3>
         <p>Drop it into your agent. Works with OpenAI, Anthropic, Groq, or any LLM.</p>
-        <div class="code-block"><span class="dim">import</span> agentsitter<br>sitter = agentsitter.watch(<br>&nbsp;&nbsp;api_key=<span style="color:#fde68a">"agt_xxx"</span>,<br>&nbsp;&nbsp;alert=<span style="color:#fde68a">"you@email.com"</span>)<br><span class="dim"># after every call:</span><br>sitter.track(cost=0.04)</div>
+        <div class="code-block"><span class="dim">import</span> agentsitter<br>sitter = agentsitter.watch(<br>&nbsp;&nbsp;api_key=<span style="color:#fde68a">"agt_xxx"</span>,<br>&nbsp;&nbsp;alert=<span style="color:#fde68a">"you@email.com"</span>)<br><span class="dim"># after every call:</span><br>sitter.track(cost=0.004)</div>
+        <p style="font-size:12px;color:var(--muted);margin-top:.65rem;font-family:var(--mono)">GPT-4o → 0.005 · Claude → 0.004 · Groq → 0.0001 · not sure? use 0.01</p>
       </div>
       <div class="step">
         <div class="step-n">03</div>
